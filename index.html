@@ -426,7 +426,7 @@
             <option>35–44</option>
             <option>45+</option>
           </select>
-          <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="submitForm('caller')">Join the waitlist</button>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="submitForm('caller', this)">Join the waitlist</button>
           <div class="form-msg" id="msg-caller">You're on the list. We'll text you when Delhi NCR calls open up.</div>
         </div>
       </div>
@@ -446,7 +446,7 @@
             <option>Evenings</option>
             <option>Flexible / varies</option>
           </select>
-          <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="submitForm('listener')">Join the waitlist</button>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="submitForm('listener', this)">Join the waitlist</button>
           <div class="form-msg" id="msg-listener">You're on the list. We'll reach out about onboarding and training.</div>
         </div>
       </div>
@@ -512,9 +512,57 @@
     document.getElementById('form-'+type).classList.add('active');
     document.getElementById('join-'+type).scrollIntoView({behavior:'smooth', block:'center'});
   }
-  function submitForm(type){
+
+  // Paste your Google Apps Script Web App URL here once deployed
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXpiz-CQ-B5V2soe6CqwewGGjIkSINjrmZVvMQ9ZKkdhJmmYeafUvYkX1C5Z-F-1BN5Q/exec";
+
+  function submitForm(type, btn){
     const msg = document.getElementById('msg-'+type);
-    msg.classList.add('show');
+    const originalText = btn.textContent;
+
+    let data = new URLSearchParams();
+    data.append('type', type);
+
+    if(type === 'caller'){
+      const name = document.getElementById('caller-name').value.trim();
+      const phone = document.getElementById('caller-phone').value.trim();
+      const age = document.getElementById('caller-age').value;
+      if(!name || !phone){ alert('Please fill in your name and phone number.'); return; }
+      data.append('name', name);
+      data.append('phone', phone);
+      data.append('age', age);
+    } else {
+      const name = document.getElementById('listener-name').value.trim();
+      const phone = document.getElementById('listener-phone').value.trim();
+      const availability = document.getElementById('listener-avail').value;
+      if(!name || !phone){ alert('Please fill in your name and phone number.'); return; }
+      data.append('name', name);
+      data.append('phone', phone);
+      data.append('availability', availability);
+    }
+
+    if(SCRIPT_URL.includes('PASTE_YOUR')){
+      // Backend not connected yet — just show the confirmation locally
+      msg.classList.add('show');
+      return;
+    }
+
+    btn.textContent = 'Submitting...';
+    btn.disabled = true;
+
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: data
+    }).then(() => {
+      msg.classList.add('show');
+      btn.textContent = originalText;
+      btn.disabled = false;
+    }).catch(() => {
+      alert('Something went wrong — please try again in a moment.');
+      btn.textContent = originalText;
+      btn.disabled = false;
+    });
   }
 </script>
 
