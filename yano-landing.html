@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bak Bak — Someone to Talk To</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #FFF8EA;
+    --dusk: #FFEFC2;
+    --dusk-2: #FFDCC2;
+    --parchment: #4A3324;
+    --amber: #FF9F1C;
+    --clay: #FF6F59;
+    --sage: #2A9D8F;
+    --pink: #FF5D8F;
+    --line: rgba(74,51,36,0.12);
+    --text-dim: rgba(74,51,36,0.68);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--parchment);
+    font-family:'Quicksand',sans-serif;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--amber);color:#fff;}
+  a{color:inherit;}
+
+  .wrap{max-width:1100px;margin:0 auto;padding:0 28px;}
+
+  /* NAV */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px 28px;
+    background:linear-gradient(180deg, rgba(255,248,234,0.94), rgba(255,248,234,0));
+    backdrop-filter:blur(6px);
+  }
+  .logo{
+    font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1.5rem;letter-spacing:0.01em;
+    display:flex;align-items:baseline;gap:9px;color:var(--parchment);
+  }
+  .logo .sun{font-size:1.15rem;display:inline-block;animation:spin 9s linear infinite;transform-origin:50% 55%;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .logo small{
+    font-family:'Quicksand',sans-serif;font-weight:600;font-size:0.68rem;letter-spacing:0.1em;
+    color:var(--text-dim);text-transform:uppercase;
+  }
+  .nav-cta{
+    font-family:'Quicksand',sans-serif;font-weight:700;font-size:0.8rem;letter-spacing:0.02em;
+    border:2px solid var(--parchment);padding:9px 20px;border-radius:100px;
+    transition:transform .2s, background .2s, color .2s;
+    display:inline-block;
+  }
+  .nav-cta:hover{background:var(--amber);border-color:var(--amber);color:#fff;transform:translateY(-2px) rotate(-1deg);}
+
+  /* HERO */
+  .hero{
+    min-height:100svh;position:relative;
+    display:flex;flex-direction:column;justify-content:center;
+    padding-top:120px;padding-bottom:80px;
+    background:
+      radial-gradient(ellipse 900px 600px at 15% -10%, rgba(255,159,28,0.35), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 10%, rgba(255,93,143,0.25), transparent 60%),
+      var(--ink);
+  }
+  .wave-field{
+    position:absolute;inset:0;top:0;height:100%;
+    display:flex;align-items:center;justify-content:center;
+    pointer-events:none;z-index:0;opacity:0.75;
+  }
+  .wave-field svg{width:min(1400px,150%);height:auto;}
+  .wave-path{
+    fill:none;stroke:url(#waveGrad);stroke-width:2.2;
+    stroke-linecap:round;
+  }
+  .hero-inner{position:relative;z-index:2;}
+  .eyebrow{
+    font-family:'Quicksand',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.06em;
+    color:#fff;background:var(--clay);text-transform:uppercase;margin-bottom:26px;
+    display:inline-flex;align-items:center;gap:10px;padding:8px 18px;border-radius:100px;
+    transform:rotate(-2deg);
+  }
+  .eyebrow::before{
+    content:'';width:8px;height:8px;border-radius:50%;background:#fff;
+    box-shadow:0 0 0 0 rgba(255,255,255,0.6);
+    animation:pulse 2.2s infinite;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(255,255,255,0.5);}
+    70%{box-shadow:0 0 0 10px rgba(255,255,255,0);}
+    100%{box-shadow:0 0 0 0 rgba(255,255,255,0);}
+  }
+  h1{
+    font-family:'Baloo 2',sans-serif;font-weight:700;
+    font-size:clamp(2.6rem, 7vw, 5.2rem);
+    line-height:1.05;letter-spacing:-0.01em;
+    max-width:14ch;color:var(--parchment);
+  }
+  h1 em{font-style:normal;color:var(--amber);position:relative;}
+  .hero-sub{
+    margin-top:24px;max-width:46ch;font-size:1.18rem;line-height:1.6;font-weight:500;
+    color:var(--text-dim);
+  }
+  .hero-ctas{display:flex;gap:16px;margin-top:38px;flex-wrap:wrap;}
+  .btn{
+    font-family:'Quicksand',sans-serif;font-weight:700;font-size:1rem;
+    padding:16px 32px;border-radius:100px;border:2px solid transparent;
+    cursor:pointer;transition:transform .2s, box-shadow .2s, background .2s;
+    display:inline-flex;align-items:center;gap:10px;
+  }
+  .btn-primary{background:var(--amber);color:#fff;box-shadow:0 6px 0 0 #C97416;}
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 9px 0 0 #C97416;}
+  .btn-primary:active{transform:translateY(2px);box-shadow:0 2px 0 0 #C97416;}
+  .btn-ghost{border-color:var(--parchment);color:var(--parchment);background:transparent;}
+  .btn-ghost:hover{background:var(--parchment);color:var(--ink);transform:translateY(-3px) rotate(-1deg);}
+
+  .hero-meta{
+    margin-top:56px;display:flex;gap:28px;flex-wrap:wrap;
+  }
+  .hero-meta div{
+    font-family:'Quicksand',sans-serif;font-weight:600;font-size:0.78rem;letter-spacing:0.02em;
+    color:var(--text-dim);background:rgba(74,51,36,0.06);padding:8px 16px;border-radius:100px;
+  }
+  .hero-meta span{color:var(--clay);font-weight:700;}
+
+  /* SECTION SHARED */
+  section{padding:100px 0;position:relative;}
+  .section-label{
+    font-family:'Quicksand',sans-serif;font-size:0.82rem;font-weight:700;letter-spacing:0.08em;
+    text-transform:uppercase;color:var(--clay);margin-bottom:16px;
+  }
+  h2{
+    font-family:'Baloo 2',sans-serif;font-weight:700;font-size:clamp(1.9rem,4vw,2.9rem);
+    max-width:18ch;line-height:1.15;margin-bottom:20px;color:var(--parchment);
+  }
+  .lede{max-width:56ch;color:var(--text-dim);font-size:1.08rem;font-weight:500;line-height:1.65;}
+
+  .stats{background:var(--dusk);border-top:2px dashed rgba(74,51,36,0.2);}
+
+  /* WHY / STIGMA SECTION */
+  .why{background:var(--ink);}
+  .why-grid{
+    display:grid;grid-template-columns:1.1fr 1fr;gap:70px;align-items:start;margin-top:56px;
+  }
+  .why-text p{color:var(--text-dim);line-height:1.75;font-size:1.05rem;font-weight:500;margin-bottom:18px;}
+  .why-text strong{color:var(--parchment);font-weight:700;}
+  .stat-cards{display:flex;flex-direction:column;gap:2px;}
+  .stat-card{
+    padding:24px 22px;border-radius:16px;margin-bottom:10px;
+    background:rgba(255,159,28,0.08);
+    display:flex;justify-content:space-between;align-items:baseline;gap:20px;
+  }
+  .stat-card:nth-child(2){background:rgba(255,93,143,0.08);}
+  .stat-card:nth-child(3){background:rgba(42,157,143,0.08);}
+  .stat-num{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:2rem;color:var(--amber);white-space:nowrap;}
+  .stat-card:nth-child(2) .stat-num{color:var(--pink);}
+  .stat-card:nth-child(3) .stat-num{color:var(--sage);}
+  .stat-desc{color:var(--text-dim);font-size:0.92rem;font-weight:500;line-height:1.5;text-align:right;}
+
+  /* HOW IT WORKS - phone call flow */
+  .flow{background:var(--dusk-2);}
+  .call-flow{margin-top:60px;display:flex;flex-direction:column;}
+  .call-step{
+    display:grid;grid-template-columns:120px 1fr;gap:36px;
+    padding:34px 26px;margin-bottom:14px;border-radius:18px;
+    background:rgba(255,248,234,0.6);
+    align-items:center;
+  }
+  .call-tag{
+    font-family:'Quicksand',sans-serif;font-weight:700;font-size:0.75rem;color:var(--clay);
+    letter-spacing:0.06em;text-transform:uppercase;
+  }
+  .call-step h3{
+    font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1.4rem;margin-bottom:8px;color:var(--parchment);
+  }
+  .call-step p{color:var(--text-dim);max-width:52ch;line-height:1.6;font-weight:500;}
+
+  /* FORK - two paths */
+  .fork{background:var(--ink);}
+  .fork-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:56px;
+  }
+  .fork-card{
+    background:var(--dusk);padding:44px 38px;position:relative;
+    border-radius:26px;transition:transform .3s, box-shadow .3s;
+    border:3px solid transparent;
+  }
+  .fork-card:nth-child(2){background:#FFE0EA;}
+  .fork-card:hover{transform:translateY(-4px) rotate(-0.5deg);box-shadow:0 16px 34px -14px rgba(74,51,36,0.25);}
+  .fork-card .tag{
+    font-family:'Quicksand',sans-serif;font-weight:700;font-size:0.72rem;letter-spacing:0.08em;
+    text-transform:uppercase;color:#fff;background:var(--amber);
+    margin-bottom:18px;display:inline-block;padding:6px 14px;border-radius:100px;
+  }
+  .fork-card:nth-child(2) .tag{background:var(--pink);}
+  .fork-card h3{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1.8rem;margin-bottom:14px;color:var(--parchment);}
+  .fork-card p{color:var(--text-dim);line-height:1.6;margin-bottom:28px;font-size:1rem;font-weight:500;}
+  .fork-card:nth-child(2) .btn-primary{background:var(--pink);box-shadow:0 6px 0 0 #C93A66;}
+  .fork-card:nth-child(2) .btn-primary:hover{box-shadow:0 9px 0 0 #C93A66;}
+
+  /* FORM PANELS (hidden until opened) */
+  .form-panel{
+    display:none;margin-top:8px;
+  }
+  .form-panel.active{display:block;}
+  .form-panel input, .form-panel select{
+    width:100%;padding:13px 16px;border-radius:12px;border:2px solid rgba(74,51,36,0.15);
+    background:#fff;color:var(--parchment);font-family:'Quicksand',sans-serif;font-weight:600;
+    font-size:0.95rem;margin-bottom:12px;
+  }
+  .form-panel input::placeholder{color:rgba(74,51,36,0.4);}
+  .form-panel input:focus, .form-panel select:focus{outline:none;border-color:var(--amber);}
+  .form-msg{
+    font-family:'Quicksand',sans-serif;font-weight:700;font-size:0.85rem;color:var(--sage);
+    margin-top:14px;display:none;
+  }
+  .form-msg.show{display:block;}
+
+  /* SAFETY */
+  .safety{background:var(--dusk-2);}
+  .safety-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:56px;
+  }
+  .safety-item{background:var(--ink);padding:34px 28px;border-radius:20px;}
+  .safety-item .mark{
+    font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1.6rem;color:var(--amber);
+    margin-bottom:14px;display:block;
+  }
+  .safety-item h4{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1.2rem;margin-bottom:10px;color:var(--parchment);}
+  .safety-item p{color:var(--text-dim);font-size:0.92rem;font-weight:500;line-height:1.6;}
+
+  footer{
+    padding:50px 0 40px;border-top:2px dashed rgba(74,51,36,0.2);
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;
+  }
+  .footer-logo{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1.2rem;color:var(--parchment);}
+  footer p{color:var(--text-dim);font-size:0.85rem;font-weight:600;}
+
+  @media(max-width:860px){
+    .why-grid, .fork-grid, .safety-grid{grid-template-columns:1fr;}
+    .call-step{grid-template-columns:1fr;gap:10px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo"><span class="sun">☀️</span>Bak Bak <small>someone to talk to</small></div>
+  <a href="#join" class="nav-cta">Join the waitlist</a>
+</nav>
+
+<section class="hero">
+  <div class="wave-field" aria-hidden="true">
+    <svg viewBox="0 0 1400 400" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="waveGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#FF9F1C" stop-opacity="0"/>
+          <stop offset="35%" stop-color="#FF9F1C" stop-opacity="0.9"/>
+          <stop offset="65%" stop-color="#FF5D8F" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#FF5D8F" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <path class="wave-path" id="wavePath1" d=""/>
+      <path class="wave-path" id="wavePath2" d="" opacity="0.5"/>
+    </svg>
+  </div>
+
+  <div class="wrap hero-inner">
+    <div class="eyebrow">Now taking early sign-ups in Delhi NCR</div>
+    <h1>Someone to <em>talk to</em>,<br>whenever it's heavy.</h1>
+    <p class="hero-sub">Real people, trained to talk like a friend — not a therapist. Rant about your day, plan your next move, or just have company. Book a time. Call when you're ready.</p>
+    <div class="hero-ctas">
+      <a href="#join-caller" class="btn btn-primary" onclick="openForm('caller')">I want someone to talk to</a>
+      <a href="#join-listener" class="btn btn-ghost" onclick="openForm('listener')">Become a listener</a>
+    </div>
+    <div class="hero-meta">
+      <div><span>18+</span> only, verified</div>
+      <div><span>Voice-only</span>, fully private</div>
+      <div><span>Delhi NCR</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="wrap">
+    <div class="section-label">The scale of it</div>
+    <h2>This isn't a small problem.</h2>
+    <div class="stat-cards" style="margin-top:48px;">
+      <div class="stat-card">
+        <div class="stat-num">1 in 5</div>
+        <div class="stat-desc">Unmarried Indian men report having no close friends — rising to roughly 1 in 4 among men under 30</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">43%</div>
+        <div class="stat-desc">Of urban Indians say they feel lonely at least sometimes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">2x</div>
+        <div class="stat-desc">Men in India die by suicide at more than double the rate of women — a gap researchers link partly to the stigma around men naming what they feel</div>
+      </div>
+    </div>
+    <p class="lede" style="margin-top:36px;">None of this is inevitable. It's what happens when there's no low-pressure way to just say the thing out loud.</p>
+  </div>
+</section>
+
+<section class="why">
+  <div class="wrap">
+    <div class="section-label">Why we exist</div>
+    <h2>Loneliness doesn't announce itself.</h2>
+    <div class="why-grid">
+      <div class="why-text">
+        <p>It shows up as a quiet evening that goes on too long. A day you got through but didn't really talk about. Most people carry it alone — not because there's no one who'd listen, but because <strong>saying it out loud to someone who knows you feels harder than saying nothing at all.</strong></p>
+        <p>Bak Bak isn't therapy and it isn't dating. It's a scheduled phone call with a real person whose only job, for those twenty minutes, is to listen. You choose the time. You choose how much to say.</p>
+      </div>
+      <div class="stat-cards">
+        <div class="stat-card">
+          <div class="stat-num">20 min</div>
+          <div class="stat-desc">A typical first call — enough time to actually say something, not just small talk</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">100%</div>
+          <div class="stat-desc">Voice-only. No profiles, no photos, no history carried between calls unless you want it</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">1</div>
+          <div class="stat-desc">Tap to end any call, instantly, no explanation needed — for callers and listeners alike</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="not-therapy" style="background:var(--dusk-2);">
+  <div class="wrap">
+    <div class="section-label">Let's be clear</div>
+    <h2>Not therapy. Not a helpline. Just a friend on the phone.</h2>
+    <div class="why-grid">
+      <div class="why-text">
+        <p>Most apps built for men's emotional wellbeing lead with doctors, counselors, and clinical language. That's the right thing for some problems — but not every bad day needs a professional. Sometimes you just want to <strong>rant about your boss, complain about your in-laws, or talk through whether you should take the promotion</strong> — without booking a "session" or explaining a diagnosis.</p>
+        <p>Bak Bak is trained women who are there to talk like a friend would — not to treat you, assess you, or take notes on you. No forms, no "how does that make you feel." Just a conversation, the way you'd have it with someone who already knows you, except you don't have to explain the backstory.</p>
+      </div>
+      <div class="stat-cards">
+        <div class="stat-card">
+          <div class="stat-num">Vent</div>
+          <div class="stat-desc">About your boss, your commute, your family — nothing's too small to bring to the call</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">Plan</div>
+          <div class="stat-desc">Talk through a decision, a goal, or your next move — not just what's wrong</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">Ramble</div>
+          <div class="stat-desc">No agenda required. Some calls are just company for twenty minutes</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="flow">
+  <div class="wrap">
+    <div class="section-label">How a call happens</div>
+    <h2>From "I need to talk" to actually talking.</h2>
+    <div class="call-flow">
+      <div class="call-step">
+        <div class="call-tag">Before</div>
+        <div>
+          <h3>Tell us a little about yourself</h3>
+          <p>Your age bracket and what's on your mind. We use this only to match you with a listener you'll feel comfortable talking to — nothing is shared beyond that.</p>
+        </div>
+      </div>
+      <div class="call-step">
+        <div class="call-tag">Matching</div>
+        <div>
+          <h3>We pair you with a listener</h3>
+          <p>Matched by age and comfort, not appearance. You'll get a first name and a slot — no browsing, no picking, no pressure.</p>
+        </div>
+      </div>
+      <div class="call-step">
+        <div class="call-tag">The call</div>
+        <div>
+          <h3>Book a slot, call when it's time</h3>
+          <p>Your number stays private and so does theirs. The call happens through Bak Bak — talk about your day, a problem, or nothing in particular.</p>
+        </div>
+      </div>
+      <div class="call-step">
+        <div class="call-tag">After</div>
+        <div>
+          <h3>Come back, or don't</h3>
+          <p>Pay per call, or keep a running balance. There's no subscription pressure — this is here when you need it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="fork" id="join">
+  <div class="wrap">
+    <div class="section-label">Get on the list</div>
+    <h2>Two ways in.</h2>
+    <p class="lede">We're starting in Delhi NCR with a small group on both sides first. Tell us which one is you.</p>
+
+    <div class="fork-grid">
+      <div class="fork-card" id="join-caller">
+        <span class="tag">For callers</span>
+        <h3>I want someone to talk to</h3>
+        <p>Get early access when we open calls in Delhi NCR. First conversation is free.</p>
+        <button class="btn btn-primary" onclick="openForm('caller')">Join as a caller</button>
+        <div class="form-panel" id="form-caller">
+          <input type="text" placeholder="Your name" id="caller-name">
+          <input type="tel" placeholder="Phone number" id="caller-phone">
+          <select id="caller-age">
+            <option value="">Age bracket</option>
+            <option>18–24</option>
+            <option>25–34</option>
+            <option>35–44</option>
+            <option>45+</option>
+          </select>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="submitForm('caller')">Join the waitlist</button>
+          <div class="form-msg" id="msg-caller">You're on the list. We'll text you when Delhi NCR calls open up.</div>
+        </div>
+      </div>
+
+      <div class="fork-card" id="join-listener">
+        <span class="tag">For listeners</span>
+        <h3>Become a listener</h3>
+        <p>Flexible hours, work from home, paid per call. 18+, women only, Delhi NCR to start.</p>
+        <button class="btn btn-primary" onclick="openForm('listener')">Join as a listener</button>
+        <div class="form-panel" id="form-listener">
+          <input type="text" placeholder="Your name" id="listener-name">
+          <input type="tel" placeholder="Phone number" id="listener-phone">
+          <select id="listener-avail">
+            <option value="">Typical availability</option>
+            <option>Mornings</option>
+            <option>Afternoons</option>
+            <option>Evenings</option>
+            <option>Flexible / varies</option>
+          </select>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="submitForm('listener')">Join the waitlist</button>
+          <div class="form-msg" id="msg-listener">You're on the list. We'll reach out about onboarding and training.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="safety">
+  <div class="wrap">
+    <div class="section-label">Ground rules</div>
+    <h2>What Bak Bak is, and isn't.</h2>
+    <div class="safety-grid">
+      <div class="safety-item">
+        <span class="mark">01</span>
+        <h4>18+, verified, always</h4>
+        <p>Every caller and listener confirms their age before their first call. No exceptions, no workarounds.</p>
+      </div>
+      <div class="safety-item">
+        <span class="mark">02</span>
+        <h4>Conversation, not romance</h4>
+        <p>Bak Bak is a listening service. Calls that turn sexual or harassing end immediately, and repeat callers are blocked.</p>
+      </div>
+      <div class="safety-item">
+        <span class="mark">03</span>
+        <h4>Listeners control the call</h4>
+        <p>Any listener can end a call or block a caller at any time, no explanation required. Their comfort matters as much as yours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:20px;">
+    <div class="footer-logo">Bak Bak</div>
+    <p>Delhi NCR &middot; 2026 &middot; Someone to talk to, whenever it's heavy.</p>
+  </div>
+</footer>
+
+<script>
+  // Animated waveform in hero
+  const path1 = document.getElementById('wavePath1');
+  const path2 = document.getElementById('wavePath2');
+  let t = 0;
+  function genWave(offset, amp1, amp2, freq1, freq2){
+    let d = "M0,200 ";
+    for(let x=0;x<=1400;x+=20){
+      const y = 200 + Math.sin((x*freq1)+offset)*amp1 + Math.sin((x*freq2)+offset*1.3)*amp2;
+      d += `L${x},${y} `;
+    }
+    return d;
+  }
+  function animateWave(){
+    t += 0.018;
+    path1.setAttribute('d', genWave(t, 46, 18, 0.012, 0.023));
+    path2.setAttribute('d', genWave(t*1.4, 30, 24, 0.009, 0.017));
+    requestAnimationFrame(animateWave);
+  }
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduceMotion){ animateWave(); }
+  else { path1.setAttribute('d', genWave(0,46,18,0.012,0.023)); path2.setAttribute('d', genWave(0,30,24,0.009,0.017)); }
+
+  function openForm(type){
+    document.getElementById('form-'+type).classList.add('active');
+    document.getElementById('join-'+type).scrollIntoView({behavior:'smooth', block:'center'});
+  }
+  function submitForm(type){
+    const msg = document.getElementById('msg-'+type);
+    msg.classList.add('show');
+  }
+</script>
+
+</body>
+</html>
